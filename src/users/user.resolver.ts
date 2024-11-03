@@ -18,4 +18,10 @@ export class UsersResolver{
     async createUser(@Args('createUserInput') createUserInput: CreateUserDto){
         return this.usersService.create(createUserInput);
     }
+
+    //listar todos os usuarios
+    @Query(() => [UsersEntity])
+    async users(){
+        return this.usersService.findAll();
+    }
 }

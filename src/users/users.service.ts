@@ -17,4 +17,10 @@ export class UsersService{
         const user = this.userRepository.create(createUserDto);
         return await this,this.userRepository.save(user);
     }
+
+    //operação para listar todos os usuarios
+    async findAll(): Promise<UsersEntity[]>{
+        return await this.userRepository.find();
+    }
+
 }
