@@ -23,4 +23,8 @@ export class UsersService{
         return await this.userRepository.find();
     }
 
+    //operação para listar um usuario especifico com base no seu id
+    async findOne(id: string): Promise<UsersEntity>{
+        return await this.userRepository.findOneBy({id});
+    }
 }

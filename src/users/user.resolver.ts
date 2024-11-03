@@ -24,4 +24,10 @@ export class UsersResolver{
     async users(){
         return this.usersService.findAll();
     }
+
+    //listar usuario especifico
+    @Query(() => UsersEntity, {nullable: true})
+    async user(@Args('id') id: string){
+        return this.usersService.findOne(id);
+    }
 }
