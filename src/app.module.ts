@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'; // Importa o ApolloDriver
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'; // Importa o 
       driver: ApolloDriver, // Especifica o driver do Apollo
       autoSchemaFile: true, // Gera o schema GraphQL automaticamente
     }),
+    UsersModule,
   ],
 })
 export class AppModule {}
