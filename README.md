@@ -1,99 +1,95 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+O NestJS é um framework de Node.js para construir aplicações server-side eficientes, confiáveis e escaláveis. Ele usa o TypeScript como linguagem padrão e é inspirado no design modular e na injeção de dependências do Angular, o que ajuda a organizar o código de maneira clara e reutilizável. O NestJS é especialmente poderoso para criar APIs REST, mas também suporta a integração com GraphQL, WebSockets e outras tecnologias.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**GraphQL** é uma linguagem de consulta para APIs, desenvolvida pelo Facebook. Em vez de trabalhar com múltiplos endpoints como em REST, no GraphQL você tem um único endpoint onde os clientes definem exatamente os dados que precisam. Isso resolve problemas de *over-fetching* (trazer mais dados que o necessário) e *under-fetching* (trazer menos dados que o necessário) que podem ocorrer em APIs REST.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Usar GraphQL com NestJS
 
-## Description
+Ao usar o NestJS junto com GraphQL, temos um método alternativo para criar e consumir APIs, permitindo mais flexibilidade para os clientes escolherem os dados que desejam.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+#### Comparação: API REST com Controller vs. API GraphQL
 
-## Project setup
+| Característica                    | REST com Controller                        | GraphQL                                     |
+|-----------------------------------|--------------------------------------------|---------------------------------------------|
+| **Estrutura de Endpoint**         | Vários endpoints (por recurso ou ação)     | Um único endpoint                           |
+| **Retorno de Dados**              | Retorna dados fixos por endpoint           | Cliente especifica os dados que precisa     |
+| **Controle de Dados**             | Rígido, definido pelo servidor             | Flexível, definido pelo cliente             |
+| **Over-fetching/Under-fetching**  | Pode ocorrer frequentemente                | Reduzido, pois cliente escolhe os campos    |
+| **Complexidade de Operações**     | Requer múltiplos endpoints para operações complexas | Realiza operações complexas em uma única chamada |
+| **Suporte a Tipos Dinâmicos**     | Estrutura de dados fixos                   | Schema de tipos flexível e detalhado        |
 
-```bash
-$ npm install
+### Vantagens e Desvantagens
+
+**Vantagens de Usar GraphQL com NestJS**
+1. **Flexibilidade no Retorno de Dados**: O cliente pode especificar exatamente quais dados ele quer, evitando o carregamento excessivo ou insuficiente.
+2. **Redução de Endpoints**: Em vez de criar endpoints para cada operação, usamos um único endpoint onde definimos queries e mutations.
+3. **Schema Fortemente Tipado**: Em GraphQL, o schema define a estrutura dos dados e o que está disponível para consulta. Isso facilita a validação de dados e a documentação da API.
+
+**Desvantagens de Usar GraphQL**
+1. **Maior Complexidade Inicial**: Implementar e aprender GraphQL pode exigir um pouco mais de conhecimento técnico e configuração em comparação ao REST.
+2. **Query Complexity e Performance**: Com o poder de escolher os dados, clientes podem fazer consultas muito complexas que sobrecarregam o servidor. Em alguns casos, é necessário implementar uma lógica para limitar a profundidade ou o custo das queries.
+
+### Como Consumir Dados de uma API
+
+1. **API REST com Controller**: Ao fazer uma chamada HTTP (GET, POST, etc.) a um endpoint REST, você recebe uma resposta JSON com dados fixos definidos pelo servidor.
+
+2. **API GraphQL**: No GraphQL, para consultar ou modificar dados, você usa **queries** (para consultas) ou **mutations** (para criar/atualizar dados). A requisição é feita enviando uma query ou mutation no corpo da chamada HTTP. Isso permite definir exatamente quais dados você quer, inclusive campos específicos ou objetos relacionados.
+
+### Exemplo Visual
+
+1. **API REST** (Controller)
+   ```http
+   GET /users
+   ```
+   Resposta:
+   ```json
+   [
+     {
+       "id": 1,
+       "name": "Alice",
+       "email": "alice@example.com"
+     },
+     {
+       "id": 2,
+       "name": "Bob",
+       "email": "bob@example.com"
+     }
+   ]
+   ```
+
+2. **API GraphQL**
+   Query:
+   ```graphql
+   query {
+     users {
+       id
+       name
+     }
+   }
+   ```
+   Resposta:
+   ```json
+   {
+     "data": {
+       "users": [
+         {
+           "id": 1,
+           "name": "Alice"
+         },
+         {
+           "id": 2,
+           "name": "Bob"
+         }
+       ]
+     }
+   }
+   ```
+
+### Gráficos e Comparativos
+
+Para ilustrar a diferença em uso de dados, é possível imaginar:
+
+- **Volume de Dados Transferido**: APIs REST transferem mais dados devido ao retorno fixo. GraphQL reduz o volume, pois permite escolher apenas os dados necessários.
+- **Quantidade de Requisições HTTP**: Com REST, uma operação complexa pode exigir múltiplas requisições; no GraphQL, uma única chamada pode trazer tudo o que você precisa.
+
+Use GraphQL com NestJS se precisar de flexibilidade e controle granular dos dados. REST com controllers é mais simples para operações fixas e pode ser mais rápido de configurar.
 ```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
