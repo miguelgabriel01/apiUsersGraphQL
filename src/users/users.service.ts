@@ -29,8 +29,14 @@ export class UsersService{
         return await this.userRepository.findOneBy({id});
     }
 
+    //operação de atualizar um usuario
     async update(id: string, UpdateUserDto: UpdateUserDto): Promise<UsersEntity>{
         await this.userRepository.update(id, UpdateUserDto);
         return this.userRepository.findOneBy({id});
+    }
+
+    //operação para remover um usuario
+    async remove(id: string): Promise<void>{
+        await this.userRepository.delete(id);
     }
 }
