@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UsersEntity } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { promises } from 'dns';
 
 @Injectable()
 export class UsersService{
@@ -26,5 +27,10 @@ export class UsersService{
     //operação para listar um usuario especifico com base no seu id
     async findOne(id: string): Promise<UsersEntity>{
         return await this.userRepository.findOneBy({id});
+    }
+
+    async update(id: string, UpdateUserDto: UpdateUserDto): Promise<UsersEntity>{
+        await this.userRepository.update(id, UpdateUserDto);
+        return this.userRepository.findOneBy({id});
     }
 }

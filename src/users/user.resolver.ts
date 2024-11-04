@@ -30,4 +30,13 @@ export class UsersResolver{
     async user(@Args('id') id: string){
         return this.usersService.findOne(id);
     }
+
+    //atualiza um usuario
+    @Mutation(() =>UsersEntity)
+    async updateUser(
+        @Args('id') id: string,
+        @Args('updateUserInput') updateUserInput: UpdateUserDto,
+    ){
+        return this.usersService.update(id, updateUserInput);
+    }
 }
